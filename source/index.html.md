@@ -76,7 +76,6 @@ fetch("http://80.208.228.90:8080/auth/logout").then((response) => {
 
 This endpoint logs you out. (Removes cookies).
 
-<aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
 
 ### HTTP Request
 
@@ -388,9 +387,11 @@ fetch("http://80.208.228.90:8080/record/insert", {
 
 
 This endpoint adds a new record to the database and updates the device position
+The endpoint is used by the Sensor to push new data to the server.
 
+
+<aside class="notice">You do not need to be logged in for this Request.</aside>
 <aside class="warning">The parameter <code>key</code> must be you API key.</aside>
-<aside class="notice">You do not need to be logged in for this Request</aside>
 
 ### HTTP Request
 
@@ -408,8 +409,6 @@ batteryv | battery voltage at the recording | between -1000 and 1000
 latitude | latitude at this time (Position) | between -1000 and 1000
 longitude | longitude at this time (Position) | between -1000 and 1000
 key | API key | not Null
-
-<aside class="notice">The endpoint is used by the Sensor to push new data to the server</aside>
 
 
 
