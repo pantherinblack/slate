@@ -417,8 +417,6 @@ First you need to login for further use of the API
 
 </code></pre></div>
 <p>This endpoint logs you out. (Removes cookies).</p>
-
-<aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
 <h3 id='http-request-2'>HTTP Request</h3>
 <p><code>DELETE http://80.208.228.90:8080/auth/logout</code></p>
 <h1 id='devices'>Devices</h1><h2 id='get-all-devices'>Get all devices</h2><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">let</span> <span class="nx">devices</span> <span class="o">=</span> <span class="nx">fetch</span><span class="p">(</span><span class="dl">"</span><span class="s2">http://80.208.228.90:8080/device/list</span><span class="dl">"</span><span class="p">,</span>
@@ -722,11 +720,12 @@ First you need to login for further use of the API
 <span class="p">});</span>
 
 </code></pre></div>
-<p>This endpoint adds a new record to the database and updates the device position</p>
+<p>This endpoint adds a new record to the database and updates the device position
+The endpoint is used by the Sensor to push new data to the server.</p>
+
+<aside class="notice">You do not need to be logged in for this Request.</aside>
 
 <aside class="warning">The parameter <code>key</code> must be you API key.</aside>
-
-<aside class="notice">You do not need to be logged in for this Request</aside>
 <h3 id='http-request-10'>HTTP Request</h3>
 <p><code>POST http://80.208.228.90:8080/record/insert</code></p>
 <h3 id='parameters-3'>Parameters</h3>
@@ -778,8 +777,6 @@ First you need to login for further use of the API
 <td>not Null</td>
 </tr>
 </tbody></table>
-
-<aside class="notice">The endpoint is used by the Sensor to push new data to the server</aside>
 <h2 id='update-a-record'>Update a record</h2><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">let</span> <span class="nx">data</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">{
     "recordUUID": "00285967-d0a0-463c-beb0-db24626591bd",
     "deviceUUID": "TestUUID",
