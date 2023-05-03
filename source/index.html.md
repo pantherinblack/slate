@@ -2,9 +2,6 @@
 title: API Reference
 
 language_tabs: # must be one of https://github.com/rouge-ruby/rouge/wiki/List-of-supported-languages-and-lexers
-  - shell
-  - ruby
-  - python
   - javascript
 
 toc_footers:
@@ -25,221 +22,463 @@ meta:
 
 # Introduction
 
-Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.
+This is the API for the two sensors. Here you can see all API endpoins. They give information about THe sensors connected to the network and the data tehy recieved.
+It is also possible to add and manipulate data.
 
-We have language bindings in Shell, Ruby, Python, and JavaScript! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
+All examples are provided in JavaScript. You can copy the examples from the right.
 
 This example API documentation page was created with [Slate](https://github.com/slatedocs/slate). Feel free to edit it and use it as a base for your own API's documentation.
 
-# Authentication
-
-> To authorize, use this code:
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-```
-
-```shell
-# With shell, you can just pass the correct header with each request
-curl "api_endpoint_here" \
-  -H "Authorization: meowmeowmeow"
-```
+# Testing
 
 ```javascript
-const kittn = require('kittn');
+let text = fetch("http://80.208.228.90:8080/auth/test")
+    .then((response) => response.text());
 
-let api = kittn.authorize('meowmeowmeow');
 ```
 
-> Make sure to replace `meowmeowmeow` with your API key.
+This endpoint confirms, that the server is online.
+The output should contain <code>This is a test response.</code> as plain text message.
 
-Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](http://example.com/developers).
+# Authentification
 
-Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:
+## Login
 
-`Authorization: meowmeowmeow`
+```javascript
+fetch("http://80.208.228.90:8080/auth/login?userName=myUserName&password=myPassword")
+    .then((response) => {
+  //TODO
+});
 
-<aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
+```
+
+> Make sure to replace `myUserName` and `myPassword` with your login.
+
+This endpoint logs you in. (Stores cerdentails in cookies).
+
+<aside class="warning">
+First you need to login for further use of the API
 </aside>
 
-# Kittens
 
-## Get All Kittens
+### HTTP Request
 
-```ruby
-require 'kittn'
+`GET http://80.208.228.90:8080/auth/login?userName=<username>&password=<password>`
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get()
-```
-
-```shell
-curl "http://example.com/api/kittens" \
-  -H "Authorization: meowmeowmeow"
-```
+## Logout
 
 ```javascript
-const kittn = require('kittn');
+fetch("http://80.208.228.90:8080/auth/logout").then((response) => {
+  //TODO
+});
 
-let api = kittn.authorize('meowmeowmeow');
-let kittens = api.kittens.get();
+```
+
+This endpoint logs you out. (Removes cookies).
+
+<aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
+
+### HTTP Request
+
+`DELETE http://80.208.228.90:8080/auth/logout`
+
+# Devices
+
+## Get all devices
+
+```javascript
+let devices = fetch("http://80.208.228.90:8080/device/list",
+    {method: 'GET'})
+    .then((response) => response.json());
 ```
 
 > The above command returns JSON structured like this:
 
 ```json
 [
-  {
-    "id": 1,
-    "name": "Fluffums",
-    "breed": "calico",
-    "fluffiness": 6,
-    "cuteness": 7
-  },
-  {
-    "id": 2,
-    "name": "Max",
-    "breed": "unknown",
-    "fluffiness": 5,
-    "cuteness": 10
-  }
+    {
+        "deviceUUID": "eui-a840417ee185f0b5",
+        "deviceName": "LSN50v2-30B",
+        "latitude": 47.35004,
+        "longitude": 8.719297
+    },
+    {
+        "deviceUUID": "eui-b199191433091337",
+        "deviceName": "Filip",
+        "latitude": 33.0,
+        "longitude": 44.0
+    }
 ]
 ```
 
-This endpoint retrieves all kittens.
+This endpoint retrieves all devices.
 
 ### HTTP Request
 
-`GET http://example.com/api/kittens`
+`GET http://80.208.228.90:8080/device/list`
 
-### Query Parameters
-
-Parameter | Default | Description
---------- | ------- | -----------
-include_cats | false | If set to true, the result will also include cats.
-available | true | If set to false, the result will include kittens that have already been adopted.
-
-<aside class="success">
-Remember — a happy kitten is an authenticated kitten!
-</aside>
-
-## Get a Specific Kitten
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```shell
-curl "http://example.com/api/kittens/2" \
-  -H "Authorization: meowmeowmeow"
-```
+## Get a specific device
 
 ```javascript
-const kittn = require('kittn');
+let device = fetch("http://80.208.228.90:8080/device/get/eui-a840417ee185f0b5",
+    {method: 'POST'})
+    .then((response) => response.json());
 
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.get(2);
 ```
 
 > The above command returns JSON structured like this:
 
 ```json
 {
-  "id": 2,
-  "name": "Max",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
+        "deviceUUID": "eui-a840417ee185f0b5",
+        "deviceName": "LSN50v2-30B",
+        "latitude": 47.35004,
+        "longitude": 8.719297
 }
 ```
 
-This endpoint retrieves a specific kitten.
-
-<aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
+This endpoint retrieves a specific device.
 
 ### HTTP Request
 
-`GET http://example.com/kittens/<ID>`
+`GET http://80.208.228.90:8080/device/get/<UUID>`
 
 ### URL Parameters
 
 Parameter | Description
 --------- | -----------
-ID | The ID of the kitten to retrieve
+deviceUUID | the UUID of the device to retrieve
 
-## Delete a Specific Kitten
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.delete(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.delete(2)
-```
-
-```shell
-curl "http://example.com/api/kittens/2" \
-  -X DELETE \
-  -H "Authorization: meowmeowmeow"
-```
+## insert a new device
 
 ```javascript
-const kittn = require('kittn');
+let data = '{
+    "deviceUUID": "TestUUID",
+    "deviceName": "TestName",
+    "longitude": 10.0,
+    "latitude": 10.0
+}';
+fetch("http://80.208.228.90:8080/device/insert", {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(data)
+}).then(response => {
+  //TODO
+});
 
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.delete(2);
+```
+
+This endpoint adds a device to the database
+
+### HTTP Request
+
+`POST http://80.208.228.90:8080/device/insert`
+
+### Parameters
+
+Parameter | Description | Restrictions
+--------- | ----------- | ------------
+deviceUUID | The UUID of the device | 5-36 characters in length
+deviceName | The Name of the device | 1-255 characters in length
+longitude | The current longitude of the device | between -1000 and 1000
+latutude | The current latitude of the device | between -1000 and 1000
+
+
+## Update a device
+
+```javascript
+let data = '
+{
+    "deviceUUID": "TestUUID",
+    "deviceName": "TestName",
+    "longitude": 100.0,
+    "latitude": 100.0
+}';
+fetch("http://80.208.228.90:8080/device/update", {
+  method: 'PUT',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(data)
+}).then(response => {
+  //TODO
+});
+
+```
+
+This endpoint updates a device with new data.
+
+### HTTP Request
+
+`PUT http://80.208.228.90:8080/device/update`
+
+### Parameters
+
+Parameter | Description | Restrictions
+--------- | ----------- | ------------
+deviceUUID | The UUID of the device | 5-36 characters in length
+deviceName | The Name of the device | 1-255 characters in length
+longitude | The current longitude of the device | between -1000 and 1000
+latutude | The current latitude of the device | between -1000 and 1000
+
+
+
+## Delete a device
+
+```javascript
+fetch("http://80.208.228.90:8080/device/delete/TestUUID", {
+  method: 'DELETE',
+  headers: {
+    'Content-Type': 'application/json'
+  }})
+  .then(response => {
+  //TODO
+});
+```
+
+
+This endpoint deletes a device.
+
+<aside class="warning">All records of a device will also be deleted</aside>
+
+### HTTP Request
+
+`DELETE http://80.208.228.90:8080/device/delete/<UUID>`
+
+### URL Parameters
+
+Parameter | Description
+--------- | -----------
+UUID | The ID of the device to delete
+
+# Record
+
+## Get all records
+
+```javascript
+let records = fetch("http://80.208.228.90:8080/record/list?time=123", {
+  method: 'GET',
+  headers: {
+    'Content-Type': 'application/json'
+  }})
+  .then((response) => response.json());
+
+```
+
+> The above command returns JSON structured like this:
+
+```json
+[
+    {
+        "recordUUID": "b97dbf84-5ae4-4b57-9e2c-31cdf7d0f8db",
+        "deviceUUID": "eui-a840417ee185f0b5",
+        "timestamp": 1683103442000,
+        "temperature": 21.5,
+        "humidity": 49.3,
+        "batteryv": 3.671,
+        "device": {
+            "deviceUUID": "eui-a840417ee185f0b5",
+            "deviceName": "LSN50v2-30B",
+            "latitude": 47.35004,
+            "longitude": 8.719297
+        }
+    },
+    {
+        "recordUUID": "c54efe47-0910-4c8b-b3cd-2e2704c4433b",
+        "deviceUUID": "eui-a840417ee185f0b5",
+        "timestamp": 1683102242000,
+        "temperature": 21.4,
+        "humidity": 49.6,
+        "batteryv": 3.671,
+        "device": {
+            "deviceUUID": "eui-a840417ee185f0b5",
+            "deviceName": "LSN50v2-30B",
+            "latitude": 47.35004,
+            "longitude": 8.719297
+        }
+    }
+]
+```
+
+This endpoint lists all records.
+
+<aside class="notice">The URL parameter <code>time</code> is optional.</aside>
+
+### HTTP Request
+
+`GET http://80.208.228.90:8080/record/list`
+
+### URL Parameters
+
+Parameter | Description
+--------- | -----------
+time | how old the data is (days), default 1 day
+
+
+## Get a specific record
+
+```javascript
+let record = fetch("http://80.208.228.90:8080/record/get/383050c4-0cf9-461b-b0d5-136c4d067c83", {
+  method: 'GET',
+  headers: {
+    'Content-Type': 'application/json'
+  }})
+  .then((response) => response.json());
+
 ```
 
 > The above command returns JSON structured like this:
 
 ```json
 {
-  "id": 2,
-  "deleted" : ":("
+    "recordUUID": "383050c4-0cf9-461b-b0d5-136c4d067c83",
+    "deviceUUID": "eui-a840417ee185f0b5",
+    "timestamp": 1678555294000,
+    "temperature": 17.4,
+    "humidity": 48.9,
+    "batteryv": 3.674,
+    "device": {
+        "deviceUUID": "eui-a840417ee185f0b5",
+        "deviceName": "LSN50v2-30B",
+        "latitude": 47.35004,
+        "longitude": 8.719297
+    }
 }
 ```
 
-This endpoint deletes a specific kitten.
+This endpoint retrieves a specific record
+
 
 ### HTTP Request
 
-`DELETE http://example.com/kittens/<ID>`
+`GET http://80.208.228.90:8080/record/get/<UUID>`
 
 ### URL Parameters
 
 Parameter | Description
 --------- | -----------
-ID | The ID of the kitten to delete
+UUID | The UUID of the record
 
+## Insert a new record
+
+```javascript
+let data = '{
+    "deviceUUID": "TestUUID",
+    "timestamp": 123123123,
+    "temperature": 123.4,
+    "humidity": 55.6,
+    "batteryv": 12.3,
+    "latitude": 23.4,
+    "longitude": 12.5,
+    "key": "yourKey"
+}';
+fetch("http://80.208.228.90:8080/record/insert", {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(data)
+}).then(response => {
+  //TODO
+});
+
+```
+
+
+This endpoint adds a new record to the database and updates the device position
+
+<aside class="warning">The parameter <code>key</code> must be you API key.</aside>
+<aside class="notice">You do not need to be logged in for this Request</aside>
+
+### HTTP Request
+
+`POST http://80.208.228.90:8080/record/insert`
+
+### Parameters
+
+Parameter | Description | Restrictions
+--------- | ----------- | ------------
+deviceUUID | the UUID of the new device, has a default | 5-36 characters in length
+timestamp | time of the recording (in ms, UNIX) | not Null
+temperature | temperature at the recording | between -1000 and 1000
+humidity | humidity at the recording | between -1000 and 1000
+batteryv | battery voltage at the recording | between -1000 and 1000
+latitude | latitude at this time (Position) | between -1000 and 1000
+longitude | longitude at this time (Position) | between -1000 and 1000
+key | API key | not Null
+
+<aside class="notice">The endpoint is used by the Sensor to push new data to the server</aside>
+
+
+
+
+
+## Update a record
+
+```javascript
+let data = '{
+    "recordUUID": "00285967-d0a0-463c-beb0-db24626591bd",
+    "deviceUUID": "TestUUID",
+    "timestamp": 1679585108000,
+    "temperature": 17,
+    "humidity": 47.6,
+    "batteryv": 3.639
+}';
+fetch("http://80.208.228.90:8080/record/update", {
+  method: 'PUT',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(data)
+}).then(response => {
+  //TODO
+});
+
+```
+
+
+This endpoint updates a record.
+
+
+### HTTP Request
+
+`PUT http://80.208.228.90:8080/record/update`
+
+### Parameters
+
+Parameter | Description | Restrictions
+--------- | ----------- | ------------
+deviceUUID | the UUID of the new device, has a default | 5-36 characters in length
+timestamp | time of the recording (in ms, UNIX) | not Null
+temperature | temperature at the recording | between -1000 and 1000
+humidity | humidity at the recording | between -1000 and 1000
+batteryv | battery voltage at the recording | between -1000 and 1000
+
+
+## Delete a record
+
+```javascript
+fetch("http://80.208.228.90:8080/record/delete/e7ee4e74-5e24-48dc-b4ce-65f43c7bea18", {
+  method: 'DELETE',
+  headers: {
+    'Content-Type': 'application/json'
+  }
+}).then(response => {
+  //TODO
+});
+
+```
+
+This endpoint deletes a record.
+
+### HTTP Request
+
+`DELETE http://80.208.228.90:8080/record/delete/<UUID>`
+
+### URL Parameters
+
+Parameter | Description
+--------- | -----------
+UUID | UUID if the record
