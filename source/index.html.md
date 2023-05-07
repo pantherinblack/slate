@@ -1,11 +1,10 @@
 ---
 title: API Reference
 
-language_tabs: # must be one of https://github.com/rouge-ruby/rouge/wiki/List-of-supported-languages-and-lexers
+language_tabs:
   - javascript
 
 toc_footers:
-  - <a href='#'>Sign Up for a Developer Key</a>
   - <a href='https://github.com/slatedocs/slate'>Documentation Powered by Slate</a>
 
 includes:
@@ -46,7 +45,7 @@ The output should contain <code>This is a test response.</code> as plain text me
 
 ```javascript
 fetch("http://80.208.228.90:8080/auth/login?userName=myUserName&password=myPassword")
-    .then((response) => {
+    .then(response => {
   //TODO
 });
 
